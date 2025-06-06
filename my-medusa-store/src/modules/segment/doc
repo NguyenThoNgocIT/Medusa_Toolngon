@@ -1,0 +1,18 @@
+Tạo dịch vụ của mô-đun phân đoạn
+Thực hiện phương pháp nhận dạng
+Thực hiện phương pháp tắt máy
+src/modules/segment/service.ts
+-------------------------------------------------------------
+Định nghĩa mô-đun xuất khẩu
+src/modules/segment/index.ts
+-------------------------------------------------------------
+ Thêm Nhà cung cấp mô-đun vào Cấu hình của Medusa
+ medusa-config.ts
+-------------------------------------------------------------
+Theo dõi sự kiện đặt hàng
+ Tạo Bước Sự kiện Theo dõi
+ src/workflows/steps/track-event.ts
+ Tạo quy trình làm việc theo dõi đơn hàng đã đặt
+ src/workflows/track-order-placed.ts
+ Xử lý sự kiện order.placed
+ src/subscribers/order-placed.ts

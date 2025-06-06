@@ -1,0 +1,19 @@
+Tạo Mô-đun Odoo
+https://docs.medusajs.com/resources/recipes/erp/odoo
+src/modules/odoo/service.ts
+ Tạo dịch vụ
+ Phương pháp đăng nhập
+ Phương pháp lấy sản phẩm
+ --------------------------------------
+Định nghĩa mô-đun xuất khẩu
+ src/modules/odoo/index.ts
+--------------------------------------
+Thêm Mô-đun vào Cấu hình của Medusa
+ src/medusa-config.js
+--------------------------------------
+tại vì db của odoo và con medusa đang khác nhau nên phải cấu hình lại 
+cần phải Đồng bộ sản phẩm từ Odoo sang Medusa
+ src/workflows/sync-from-erp.ts
+ --------------------------------------
+Tạo công việc theo lịch trình
+src/jobs/sync-products-from-erp.ts
