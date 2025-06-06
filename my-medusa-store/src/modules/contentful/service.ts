@@ -334,4 +334,62 @@ export default class ContentfulModuleService extends MedusaService({}) {
 async getDefaultLocaleCode(){
   return await this.options.default_locale
 }
+async list(
+    filter: {
+      id: string | string[]
+      context?: {
+        locale: string
+      }
+    }
+  ) {
+    const contentfulProducts = await this.deliveryClient.getEntries({
+      limit: 15,
+      content_type: "product",
+      "fields.medusaId": filter.id,
+      locale: filter.context?.locale,
+      include: 3,
+    })
+
+    return contentfulProducts.items.map((product) => {
+      // remove links
+      const { productVariants: _, productOptions: __, ...productFields } = product.fields
+      return {
+        ...productFields,
+        product_id: product.fields.medusaId,
+        variants: product.fields.productVariants.map((variant) => {
+          // remove circular reference
+          const { product: _, productOptionValues: __, ...variantFields } = variant.fields
+          return {
+            ...variantFields,
+            product_variant_id: variant.fields.medusaId,
+            options: variant.fields.productOptionValues.map((option) => {
+              // remove circular reference
+              const { productOption: _, ...optionFields } = option.fields
+              return {
+                ...optionFields,
+                product_option_id: option.fields.medusaId,
+              }
+            }),
+          }
+        }),
+        options: product.fields.productOptions.map((option) => {
+          // remove circular reference
+          const { product: _, ...optionFields } = option.fields
+          return {
+            ...optionFields,
+            product_option_id: option.fields.medusaId,
+            values: option.fields.values.map((value) => {
+              // remove circular reference
+              const { productOptionValue: _, ...valueFields } = value.fields
+              return {
+                ...valueFields,
+                product_option_value_id: value.fields.medusaId,
+              }
+            }),
+          }
+        }),
+      }
+    })
+  }
 }
+

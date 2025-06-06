@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
+import { getProductLocaleDetails } from "@lib/data/locale"
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
@@ -95,12 +96,14 @@ export default async function ProductPage(props: Props) {
   if (!pricedProduct) {
     notFound()
   }
-
+// Lấy thông tin locale cho sản phẩm
+  const productLocaleDetails = await getProductLocaleDetails(pricedProduct.id!)
   return (
     <ProductTemplate
       product={pricedProduct}
       region={region}
       countryCode={params.countryCode}
+      productLocaleDetails={productLocaleDetails.product}
     />
   )
 }

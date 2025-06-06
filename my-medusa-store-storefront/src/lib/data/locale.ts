@@ -28,3 +28,39 @@ export async function getSelectedLocale() {
 export async function setSelectedLocale(locale: string) {
   await setLocale(locale)
 }
+export type ProductLocaleDetails = {
+  id: string
+  contentful_product: {
+    product_id: string
+    title: string
+    handle: string
+    description: Document
+    subtitle?: string
+    variants: {
+      title: string
+      product_variant_id: string
+      options: {
+        value: string
+        product_option_id: string
+      }[]
+    }[]
+    options: {
+      title: string
+      product_option_id: string
+      values: {
+        title: string
+        product_option_value_id: string
+      }[]
+    }[]
+  }
+}
+
+export async function getProductLocaleDetails(
+  productId: string
+) {
+  const localeCode = await getSelectedLocale()
+
+  return await sdk.client.fetch<{
+    product: ProductLocaleDetails
+  }>(`/store/products/${productId}/${localeCode}`)
+}
