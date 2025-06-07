@@ -1,4 +1,4 @@
-const { loadEnv, defineConfig } = require('@medusajs/framework/utils');
+const { loadEnv, defineConfig, Modules, ContainerRegistrationKeys } = require('@medusajs/framework/utils');
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd());
 
@@ -14,6 +14,30 @@ module.exports = defineConfig({
     },
   },
   modules: [
+    // User Module - với jwt_secret
+    {
+      resolve: "@medusajs/medusa/user",
+      options: {
+        jwt_secret: process.env.JWT_SECRET || "supersecret",
+      },
+    },
+    // Cache Module - cần thiết cho Auth
+    {
+      resolve: "@medusajs/medusa/cache-inmemory",
+    },
+    // Auth Module
+    {
+      resolve: "@medusajs/medusa/auth",
+      dependencies: [Modules.CACHE, ContainerRegistrationKeys.LOGGER],
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/auth-emailpass",
+            id: "emailpass",
+          },
+        ],
+      },
+    },
     {
       resolve: "@medusajs/medusa/analytics",
       options: {
@@ -37,7 +61,6 @@ module.exports = defineConfig({
         apiKey: process.env.ODOO_API_KEY,
       },
     },
-    // Thêm module Contentful vào đây
     {
       resolve: "./src/modules/contentful",
       options: {
@@ -60,6 +83,30 @@ module.exports = defineConfig({
             },
           },
         ],
+      },
+    },
+    {
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/notification-sendgrid",
+            id: "sendgrid",
+            options: {
+              channels: ["email"],
+              api_key: process.env.SENDGRID_API_KEY,
+              from: process.env.SENDGRID_FROM,
+            },
+          },
+        ],
+      },
+    },
+    {
+      resolve: "./src/modules/algolia",
+      options: {
+        appId: process.env.ALGOLIA_APP_ID,
+        apiKey: process.env.ALGOLIA_API_KEY,
+        productIndexName: process.env.ALGOLIA_PRODUCT_INDEX_NAME,
       },
     },
   ],
