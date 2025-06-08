@@ -13,8 +13,15 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
+  jobs: [
+    {
+      resolve: "./src/jobs/sync-products-from-erp",
+      options: {},
+    },
+  ],
   modules: [
     // User Module - với jwt_secret
+
     {
       resolve: "@medusajs/medusa/user",
       options: {

@@ -16,12 +16,18 @@ type Input = {
 const getProductsFromErp = createStep(
   "get-products-from-erp",
   async (input: Input, { container }) => {
+    try {
     const odooModuleService = container.resolve("odoo") as any
 
-    const products = await odooModuleService.listProducts(undefined, input)
+    const products = await odooModuleService.listProducts([], input)
 
     return new StepResponse(products)
-  })
+  }catch (error: any) {
+    console.error("Failed to list products from Odoo:", error?.message || error)  
+    throw error
+  }
+}
+)
 export const syncFromErpWorkflow = createWorkflow(
   "sync-from-erp",
   (input: Input) => {

@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-
+import SearchModal from "@modules/search/components/modal"
 import { listRegions } from "@lib/data/regions"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
@@ -38,6 +38,7 @@ export default async function Nav() {
               >
                 Account
               </LocalizedClientLink>
+              <SearchModal />
             </div>
             <Suspense
               fallback={
