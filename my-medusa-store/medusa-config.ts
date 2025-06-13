@@ -20,8 +20,7 @@ module.exports = defineConfig({
     },
   ],
   modules: [
-    // User Module - với jwt_secret
-
+    // User Module - với jwt_secret 
     {
       resolve: "@medusajs/medusa/user",
       options: {
@@ -59,6 +58,7 @@ module.exports = defineConfig({
         ],
       },
     },
+    // EXISTING: Odoo JSON-RPC Module
     {
       resolve: "./src/modules/odoo",
       options: {
@@ -66,6 +66,18 @@ module.exports = defineConfig({
         dbName: process.env.ODOO_DB_NAME,
         username: process.env.ODOO_USERNAME,
         apiKey: process.env.ODOO_API_KEY,
+      },
+    },
+    // NEW: Odoo REST API Module
+    {
+      resolve: "./src/modules/odoo_rest",
+      options: {
+        // odoo_base_url: process.env.ODOO_BASE_URL, // http://localhost:8069
+        // api_key: process.env.ODOO_REST_API_KEY,   // REST API key từ odoo-rest-api module
+        odoo_base_url: process.env.ODOO_BASE_URL,
+    db: process.env.ODOO_DB_NAME,
+    username: process.env.ODOO_USERNAME,
+    password: process.env.ODOO_PASSWORD,
       },
     },
     {
@@ -117,4 +129,4 @@ module.exports = defineConfig({
       },
     },
   ],
-});
+})
